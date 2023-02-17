@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_customer_last_order" model="ir.ui.view">
+        <field name="name">res.customer.last.order</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='sales_purchases']/group/group/field[@name='user_id']"
+                   position="after">
+                <field name="last_order_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter" model="ir.ui.view">
+        <field name="name">res.partner.search</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="zip" filter_domain="[('zip', '=ilike', self+'%')]"/>
+                <field name="country_id"/>
+                <field name="city"/>
+            </xpath>
+            <xpath expr="//filter[@name='type_company']" position="after">
+                <separator/>
+                <filter string="Prospects" name="prospects" domain="[('sale_order_ids','=', False)]"/>
+                <filter string="Customers" name="customer" domain="[('sale_order_ids','!=', False)]"/>
+                <separator/>
+                <filter string="Top 10" name="top_customer" domain="[('top_filter','!=', False)]"/>
+                <separator/>
+                <filter string="Activities" name="activities" domain="[('activity_ids','!=', False)]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
